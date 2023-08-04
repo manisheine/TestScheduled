@@ -26,4 +26,5 @@ public final class Constants {
 	public static final String WEB="WEB";
 	public static final String RESPONSE = "Response Is Good";
 	public static final String DEFAULT_DB = "001";
+	public static final String DEFAULT_DB_02 = "002";
 }
