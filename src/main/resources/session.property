@@ -1,0 +1,7 @@
+otel.jmx.service.url=service:jmx:rmi:///jndi/rmi://127.0.0.1:1234/jmxrmi
+otel.jmx.target.system=jvm
+otel.jmx.interval.milliseconds=5000
+otel.jmx.remote.registry.ssl=false
+otel.exporter.otlp.endpoint=http://localhost:4317
+otel.metrics.exporter=otlp
+

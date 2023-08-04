@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.vinculum.dynamic.dao.TestDao">
+	<insert id="testInsert" useGeneratedKeys="true" keyProperty="serial" keyColumn="Serial" parameterType="com.vinculum.dynamic.dao.objects.TestDaoObject">
+		INSERT INTO TESTAUTO (Serial, RandomValues)	VALUES (#{serial}, #{random})
+	</insert>
+</mapper>
+ 

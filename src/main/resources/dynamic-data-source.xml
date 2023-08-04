@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:context="http://www.springframework.org/schema/context" xmlns:util="http://www.springframework.org/schema/util" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
+		 http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.1.xsd">
+
+	
+	<bean id="parentDataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource" abstract="true">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="username" value="root" />
+		<property name="password" value="manish" />
+	</bean>
+
+	<bean id="globalDataSource" parent="parentDataSource">
+		<property name="url" value="jdbc:mysql://${db.url}/${db.name.default}?useSSL=false" />
+	</bean>
+
+	<util:map id="dbIds" map-class="java.util.LinkedHashMap" key-type="java.lang.String" value-type="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<entry key="001" value-ref="globalDataSource" />
+	</util:map>
+
+	<bean id="dataSource" class="com.vinculum.dynamic.datasource.CustomerRoutingDataSource">
+		<property name="targetDataSources" ref="dbIds" />
+		<property name="defaultTargetDataSource" ref="globalDataSource" />
+	</bean>
+
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="typeAliasesPackage" value="com.vinculum.dynamic.dao.objects" />
+		<property name="mapperLocations" value="classpath*:com/vinculum/dynamic/dao/mappers/**/*.xml" />
+		<property name="configLocation" value="classpath:dynamic-mybatis-config.xml" />
+	</bean>
+
+	<bean id='sqlSession' class='org.mybatis.spring.SqlSessionTemplate'>
+		<constructor-arg index='0' ref='sqlSessionFactory' />
+		<constructor-arg index="1" value="BATCH" />
+	</bean>
+</beans>
+
+
